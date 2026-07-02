@@ -1,0 +1,2 @@
+Start: 200
+Reply: Hey there! Welcome to Blue Bottle. What can I get started for you today?
