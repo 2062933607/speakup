@@ -1,0 +1,5 @@
+Status: 200
+User (STT result): .
+AI reply: Oh, sorry about that! Just wanted to say hi. What can I get started for you today?
+
+STT working: yes
