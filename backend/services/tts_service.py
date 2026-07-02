@@ -2,8 +2,6 @@
 import asyncio
 import io
 import logging
-import edge_tts
-from openai import AsyncOpenAI
 from backend.config import settings
 
 logger = logging.getLogger(__name__)
@@ -48,6 +46,8 @@ async def text_to_speech(text: str, voice: str = "american_female") -> bytes | N
 
 async def _edge_tts(text: str, voice: str) -> bytes:
     """使用 Edge TTS (免费)"""
+    import edge_tts
+
     voice_name = VOICE_MAP.get(voice, "en-US-JennyNeural")
     communicate = edge_tts.Communicate(text, voice_name)
     audio_bytes = io.BytesIO()
@@ -59,6 +59,8 @@ async def _edge_tts(text: str, voice: str) -> bytes:
 
 async def _openai_tts(text: str) -> bytes:
     """使用 OpenAI TTS"""
+    from openai import AsyncOpenAI
+
     client = AsyncOpenAI(
         api_key=settings.openai_api_key,
         base_url=settings.openai_base_url,
