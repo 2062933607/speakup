@@ -1,0 +1,63 @@
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.history-item {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  padding: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.history-item:active {
+  background: var(--color-surface-hover);
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.history-date {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.history-count {
+  font-size: 12px;
+  color: var(--color-primary-light);
+}
+
+.history-preview {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-character {
+  font-size: 12px;
+  color: var(--color-primary-light);
+  margin-top: 4px;
+}
+
+.history-empty {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.history-empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.history-empty-text {
+  font-size: 16px;
+  color: var(--color-text-secondary);
+}
