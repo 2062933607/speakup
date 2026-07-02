@@ -1,7 +1,7 @@
 """对话 API 路由"""
 import uuid
 from datetime import datetime
-from fastapi import APIRouter, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, HTTPException, Request
 
 from backend.services.llm_service import chat
 from backend.services.stt_service import speech_to_text
@@ -130,12 +130,43 @@ async def send_message(req: SendMessageRequest):
 
 
 @router.post("/send-voice")
-async def send_voice(
-    conversation_id: str = Form(...),
-    audio: UploadFile = File(...),
-    expected_text: str | None = Form(None),
-):
-    """发送语音消息"""
+async def send_voice(request: Request):
+    """发送语音消息 — 从 multipart form 中读取音频"""
+    # 手动解析 multipart/form-data（不依赖 python-multipart）
+    content_type = request.headers.get("content-type", "")
+    if "multipart/form-data" not in content_type:
+        raise HTTPException(status_code=400, detail="Expected multipart/form-data")
+
+    body = await request.body()
+    boundary = content_type.split("boundary=")[-1].strip()
+    if boundary.startswith('"') and boundary.endswith('"'):
+        boundary = boundary[1:-1]
+
+    # 解析 multipart 各部分
+    parts = _parse_multipart(body, boundary.encode())
+    if not parts:
+        raise HTTPException(status_code=400, detail="No parts in form data")
+
+    conversation_id = None
+    audio_data = None
+    audio_format = "webm"
+    expected_text = None
+
+    for disposition, headers, content in parts:
+        name = _get_header_param(disposition, "name")
+        if name == "conversation_id":
+            conversation_id = content.decode("utf-8").strip()
+        elif name == "audio":
+            audio_data = content
+            filename = _get_header_param(disposition, "filename")
+            if filename:
+                audio_format = filename.split(".")[-1]
+        elif name == "expected_text":
+            expected_text = content.decode("utf-8").strip()
+
+    if conversation_id is None or audio_data is None:
+        raise HTTPException(status_code=400, detail="Missing conversation_id or audio")
+
     conv = conversations.get(conversation_id)
     if not conv:
         raise HTTPException(status_code=404, detail="Conversation not found")
@@ -143,10 +174,6 @@ async def send_voice(
     character = _get_character(conv["character_id"])
     if not character:
         raise HTTPException(status_code=404, detail="Character not found")
-
-    # 读取音频数据
-    audio_data = await audio.read()
-    audio_format = audio.filename.split(".")[-1] if audio.filename else "webm"
 
     # STT 识别
     recognized_text = await speech_to_text(audio_data, audio_format)
@@ -224,6 +251,51 @@ async def send_voice(
             **assistant_msg,
         },
     }
+
+
+def _get_header_param(header: str, param: str) -> str | None:
+    """从 Content-Disposition 标头中提取参数值"""
+    for part in header.split(";"):
+        part = part.strip()
+        if part.startswith(param + "="):
+            val = part.split("=", 1)[1].strip()
+            if val.startswith('"') and val.endswith('"'):
+                val = val[1:-1]
+            return val
+    return None
+
+
+def _parse_multipart(body: bytes, boundary: bytes) -> list[tuple[str, dict, bytes]]:
+    """简易 multipart 解析器"""
+    parts = []
+    # 分割各部分
+    sep = b"--" + boundary
+    sections = body.split(sep)
+    for section in sections[1:-1]:  # 跳过首尾
+        section = section.lstrip(b"\r\n")
+        # 分离头部和内容
+        if b"\r\n\r\n" not in section:
+            continue
+        header_part, content = section.split(b"\r\n\r\n", 1)
+        content = content.rstrip(b"\r\n")
+        # 移除尾部的 \r\n--
+        if content.endswith(b"\r\n"):
+            content = content[:-2]
+
+        # 解析头部
+        headers = {}
+        disposition = ""
+        for line in header_part.split(b"\r\n"):
+            line_str = line.decode("utf-8", errors="ignore")
+            if line_str.lower().startswith("content-disposition"):
+                disposition = line_str
+            elif ":" in line_str:
+                k, v = line_str.split(":", 1)
+                headers[k.strip()] = v.strip()
+
+        parts.append((disposition, headers, content))
+
+    return parts
 
 
 @router.get("/conversations")
