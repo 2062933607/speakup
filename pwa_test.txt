@@ -1,0 +1,5 @@
+Frontend: OK
+API: OK
+SW: OK
+Manifest: OK
+Icon: OK
