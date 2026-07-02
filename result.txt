@@ -1,0 +1,18 @@
+﻿[1] 对话已启动: e0f91015-4027-4973-8c96-0629fc6fbfcb
+[2] send-voice status: 200
+    User message: [Speech recognition failed. Please type your message instead.]
+    Assistant reply: I'm sorry, I couldn't hear that clearly. Could you try again or type your messag
+python : Traceback (most recent call last):
+所在位置 行:1 字符: 5
++ & { python test_stt.py 2>&1 | Out-File -FilePath result.txt -Encoding ...
++     ~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last) 
+   ::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "E:\py\spoken\test_stt.py", line 44, in <module>
+    print(f"\n{'\u2705 语音识别管道正常工作!' if r2.status_code == 200 and 'Speech recogn
+ition' not in d2.get('user_message',{}).get('text','') else '\u26a0\ufe0f STT 返
+回了错误占位符（正常，测试音频无语音）'}")
+UnicodeEncodeError: 'gbk' codec can't encode character '\u26a0' in position 2: 
+illegal multibyte sequence
