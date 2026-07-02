@@ -1,0 +1,22 @@
+REPO: https://github.com/2062933607/speakup
+OK: 61/75
+---
+Collecting files...
+Total: 75 files
+FAIL groq_diag.txt: 409
+FAIL quick_test.py: 409
+FAIL test_groq_diag.py: 409
+FAIL test_stt.py: 409
+  16/75
+FAIL backend/routers/speech.py: 409
+FAIL backend/services/__init__.py: 409
+FAIL frontend/index.html: 409
+  33/75
+FAIL frontend/public/icon-192.png: 409
+FAIL frontend/src/vite-env.d.ts: 409
+FAIL frontend/src/components/ScenarioSelector.css: 409
+  50/75
+FAIL frontend/src/hooks/useAudioRecorder.ts: 409
+FAIL frontend/src/hooks/useChat.ts: 409
+FAIL frontend/src/pages/HomePage.tsx: 409
+FAIL frontend/src/styles/global.css: 409
