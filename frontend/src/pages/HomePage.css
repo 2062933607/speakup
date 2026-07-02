@@ -1,0 +1,48 @@
+.page-header {
+  padding-bottom: 16px;
+}
+
+.page-header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.page-subtitle {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+}
+
+.section-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 20px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.character-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.section-divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: 8px 0 16px;
+}
+
+.start-btn-wrapper {
+  margin-top: 20px;
+  padding-bottom: 20px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}
