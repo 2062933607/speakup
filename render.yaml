@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: speakup
+    env: docker
+    plan: free
+    healthCheckPath: /api/characters
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_BASE_URL
+        sync: false
+      - key: LLM_MODEL
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: STT_PROVIDER
+        sync: false
