@@ -1,0 +1,2 @@
+Chat API: FAIL - Error code: 403 - {'error': {'message': 'Forbidden'}}
+Models list: FAIL - Error code: 403 - {'error': {'message': 'Forbidden'}}
