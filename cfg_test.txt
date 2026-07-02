@@ -1,0 +1,3 @@
+stt_provider: groq
+groq_key_prefix: gsk_7S4cAKxkgam...
+whisper_model: whisper-large-v3
